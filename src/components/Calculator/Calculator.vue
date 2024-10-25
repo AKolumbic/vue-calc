@@ -10,6 +10,7 @@
           @button-click="handleInput(btn)"
         />
         <CalculatorButton label="C" @button-click="clearDisplay" />
+        <CalculatorButton label="Clear History" @button-click="clearHistory" />
         <CalculatorButton label="=" @button-click="calculateResult" />
       </div>
     </div>
@@ -17,8 +18,16 @@
     <div class="history">
       <h3>Roll History</h3>
       <ul>
-        <li v-for="(entry, index) in history" :key="index">
-          {{ entry }}
+        <li
+          v-for="(entry, index) in history"
+          :key="index"
+          class="history-entry"
+        >
+          <!-- Split the rolled and total into separate lines -->
+          <span class="rolled-message">{{ entry.split('(Total:')[0] }}</span>
+          <span class="total-message"
+            >(Total: {{ entry.split('(Total: ')[1] }}</span
+          >
         </li>
       </ul>
     </div>
@@ -26,7 +35,7 @@
 </template>
 
 <script>
-import { rollDice } from './calculatorMethods';
+import { rollExpression } from './calculatorMethods';
 import CalculatorButton from '../CalculatorButton/CalculatorButton.vue';
 import './CalculatorStyles.scss';
 
@@ -79,23 +88,17 @@ export default {
       this.display = '';
     },
     calculateResult() {
-      if (this.display.match(/^\d*d\d+$/)) {
-        // Handle dice notation like 2d6, 10d20, etc.
-        const result = rollDice(this.display);
-        const entry = `Rolled ${this.display}: ${result}`;
-        this.history.unshift(entry); // Add to history
-        localStorage.setItem('rollHistory', JSON.stringify(this.history)); // Persist to localStorage
-        this.display = result.toString();
-      } else {
-        // Regular calculation for arithmetic
-        try {
-          this.display = eval(this.display);
-        } catch (e) {
-          this.display = 'Error';
-        }
-      }
-
+      const { total, details } = rollExpression(this.display); // Get the total and details
+      const entry = `Rolled ${this.display}: ${details}`;
+      this.history.unshift(entry); // Add to history log
+      localStorage.setItem('rollHistory', JSON.stringify(this.history)); // Persist to localStorage
+      this.display = total.toString();
       this.clearDisplay();
+    },
+    // Method to clear the roll history
+    clearHistory() {
+      this.history = []; // Clear history array
+      localStorage.removeItem('rollHistory'); // Remove from localStorage
     },
   },
 };
