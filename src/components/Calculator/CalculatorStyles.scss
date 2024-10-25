@@ -1,12 +1,32 @@
-.calculator {
-  max-width: 200px;
+.calculator-wrapper {
+  display: flex;
+  justify-content: space-between;
+  max-width: 800px;
   margin: 0 auto;
+}
+
+.calculator {
+  width: 60%;
   padding: 20px;
   text-align: center;
 }
 
+.history {
+  width: 200px;
+  padding: 20px;
+}
+
+.history ul {
+  list-style: none;
+  padding: 0;
+}
+
+.history li {
+  margin-bottom: 10px;
+}
+
 input {
-  width: 100%;
+  width: 98%;
   margin-bottom: 10px;
   font-size: 2em;
 }
