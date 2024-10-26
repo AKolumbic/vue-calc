@@ -93,7 +93,24 @@ export default {
       this.history.unshift(entry); // Add to history log
       localStorage.setItem('rollHistory', JSON.stringify(this.history)); // Persist to localStorage
       this.display = total.toString();
+
+      // Call triggerShake after adding the entry
+      this.triggerShake();
       this.clearDisplay();
+    },
+    triggerShake() {
+      // Use $nextTick to ensure the DOM is updated
+      this.$nextTick(() => {
+        const mostRecentEntry = document.querySelector(
+          '.history-entry:first-child'
+        );
+        if (mostRecentEntry) {
+          mostRecentEntry.classList.add('shake');
+          setTimeout(() => {
+            mostRecentEntry.classList.remove('shake');
+          }, 500); // Remove shake class after the animation (0.5s)
+        }
+      });
     },
     // Method to clear the roll history
     clearHistory() {
