@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { getButtons, rollExpression } from './calculatorMethods';
+import { getButtons, rollExpression, randomMessage } from './calculatorMethods';
 import CalculatorButton from '../CalculatorButton/CalculatorButton.vue';
 import './CalculatorStyles.scss';
 
@@ -65,19 +65,35 @@ export default {
       this.display = '';
     },
     calculateResult() {
-      const { total, details } = rollExpression(this.display); // Get the total and details
-      if (!total) {
-        this.display = 'why?';
+      // Check if the display is empty, and if so, handle it with a random message
+      if (!this.display) {
+        this.addHistoryEntry(randomMessage());
+        this.triggerShake();
         return;
       }
-      const entry = `Rolled ${this.display}: ${details}`;
-      this.history.unshift(entry); // Add to history log
-      localStorage.setItem('rollHistory', JSON.stringify(this.history)); // Persist to localStorage
-      this.display = total.toString();
 
-      // Call triggerShake after adding the entry
+      // Calculate the result if display has content
+      const { total, details } = rollExpression(this.display);
+
+      // If there's no valid total, add a random message instead
+      if (total === undefined) {
+        this.addHistoryEntry(randomMessage());
+      } else {
+        // Add the actual roll result to the history
+        const entry = `Rolled ${this.display}: ${details}`;
+        this.addHistoryEntry(entry);
+        this.display = total.toString();
+      }
+
+      // Trigger shake animation and clear the display for the next input
       this.triggerShake();
       this.clearDisplay();
+    },
+
+    // Helper method to add an entry to history and update localStorage
+    addHistoryEntry(message) {
+      this.history.unshift(message);
+      localStorage.setItem('rollHistory', JSON.stringify(this.history));
     },
     triggerShake() {
       // Use $nextTick to ensure the DOM is updated
