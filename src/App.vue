@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Calculator />
+    <router-view />
   </div>
 </template>
 
@@ -27,7 +27,7 @@ nav {
 }
 </style>
 
-<script>
+<!-- <script>
 import Calculator from './components/Calculator/Calculator.vue';
 
 export default {
@@ -35,4 +35,4 @@ export default {
     Calculator,
   },
 };
-</script>
+</script> -->
