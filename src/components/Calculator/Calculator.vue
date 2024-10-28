@@ -9,7 +9,7 @@
           :label="btn"
           @button-click="handleInput(btn)"
         />
-        <CalculatorButton label="C" @button-click="clearDisplay" />
+        <CalculatorButton label="Clear" @button-click="clearDisplay" />
         <CalculatorButton label="Clear History" @button-click="clearHistory" />
         <CalculatorButton label="=" @button-click="calculateResult" />
       </div>
@@ -23,11 +23,10 @@
           :key="index"
           class="history-entry"
         >
-          <!-- Split the rolled and total into separate lines -->
           <span class="rolled-message">{{ entry.split('(Total:')[0] }}</span>
-          <span class="total-message"
+          <!-- <span class="total-message"
             >(Total: {{ entry.split('(Total: ')[1] }}</span
-          >
+          > -->
         </li>
       </ul>
     </div>
@@ -35,7 +34,7 @@
 </template>
 
 <script>
-import { rollExpression } from './calculatorMethods';
+import { getButtons, rollExpression } from './calculatorMethods';
 import CalculatorButton from '../CalculatorButton/CalculatorButton.vue';
 import './CalculatorStyles.scss';
 
@@ -47,29 +46,7 @@ export default {
   data() {
     return {
       display: '',
-      buttons: [
-        '1',
-        '2',
-        '3',
-        '4',
-        '5',
-        '6',
-        '7',
-        '8',
-        '9',
-        '0',
-        '+',
-        '-',
-        '*',
-        '/',
-        'd4',
-        'd6',
-        'd8',
-        'd10',
-        'd12',
-        'd20',
-        'd100',
-      ],
+      buttons: getButtons(),
       history: [], // Array to store roll history
     };
   },
@@ -89,6 +66,10 @@ export default {
     },
     calculateResult() {
       const { total, details } = rollExpression(this.display); // Get the total and details
+      if (!total) {
+        this.display = 'why?';
+        return;
+      }
       const entry = `Rolled ${this.display}: ${details}`;
       this.history.unshift(entry); // Add to history log
       localStorage.setItem('rollHistory', JSON.stringify(this.history)); // Persist to localStorage
