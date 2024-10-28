@@ -41,7 +41,6 @@ export function rollExpression(expression: string): {
   try {
     // Evaluate the final expression
     const total = eval(finalExpression);
-    console.log('total', total);
     return {
       total,
       details: `${detailedRolls} = ${total}`,
