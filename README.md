@@ -17,11 +17,11 @@ A comprehensive dice rolling calculator built with Vue.js, designed for tabletop
 
 ### Light Mode
 
-![Dice Rolling Calculator in Light Mode](public/Screenshot%202025-02-26%20at%2010.05.06%20PM.png)
+![Dice Rolling Calculator in Light Mode](public/lightMode.png)
 
 ### Dark Mode
 
-![Dice Rolling Calculator in Dark Mode](public/Screenshot%202025-02-26%20at%2010.05.52%20PM.png)
+![Dice Rolling Calculator in Dark Mode](public/darkMode.png)
 
 ## Usage
 
